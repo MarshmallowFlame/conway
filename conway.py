@@ -1,14 +1,6 @@
 #python implementation of conways game of life
 
-# om död och precis 3 grannar => levande
-#om levande och färre än två eller fler än 3 granar => dör
 
-#TODO: gör test för se om ett givet seed överlever mer än x generationer, UTAN direkt upprepning (iaf inte exakt samma)
-#Om det testet passar, spara seedet i txt dokument med namn unikt för seedet (dagens datum? baserat på innehållet på nåt smart sätt? random tal?)
-#gör nån enkel generator av seeds så kan testa igenom många
-#sen köra igenom vissa för att se vilka som är verkligt intressanta
-
-import copy
 import time
 import math
 #returns number of alive neighbours of given cell
@@ -121,7 +113,7 @@ def saveToFile(bo,filename):
             myfile.write("\n")
             
 
-def boardFromSeed(seed, sideLength):
+def getFromSeed(seed, sideLength):
     global dim
     
     seed="{0:b}".format(seed)
@@ -156,15 +148,22 @@ def findUsefulSeeds(sideLength):
     start = 0
     end = 2**((dim)**2)
     print(end)
+
+
+    percents = end//100
     
     for i in range(end):
-        board = boardFromSeed(i,dim)
-        if runLife(0,100,board):
+        if i%percents ==0:
+            print (str(i//percents)+"% done")
+
+        
+        board = getFromSeed(i,dim)
+        if runLife(0,5,board):
             succ.append(i)
     print(len(succ))
     return succ    
 
-seedToUse = findUsefulSeeds(10)[500]
+seedToUse = findUsefulSeeds(4)[500]
 
-runLife(1,100,boardFromSeed(seedToUse,4))
+runLife(1,5,getFromSeed(seedToUse,4))
 
