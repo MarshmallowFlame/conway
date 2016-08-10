@@ -39,7 +39,7 @@ def printBoard(board):
 
     return theString
 
-#run the simulation, can be either with "press enter to continue" or a given amount of times
+#changes the board to one step ahead in time, while also passing along if the board is the same as previous
 def iterate(board):
     global dim
     newBoard=[[0 for x in range(dim)] for y in range(dim)]
@@ -61,7 +61,7 @@ def iterate(board):
 
 
 
-    
+#runs the simulation the stated number of times
 def runLife(pr,nr,board):
     korv=0
     while korv <=nr:
@@ -81,7 +81,8 @@ def runLife(pr,nr,board):
         #in=input("Press Enter to continue, enter 'q' to quit...")
         korv+=1
     return 1
-        
+
+#returns a board from file named "seed.cw" in seeds     
 def getFromFile():
     global dim
     with open('seeds/seed.cw', 'r') as file:
@@ -103,7 +104,7 @@ def getFromFile():
     return board
 
 
-
+#Saves the passed board to a file
 def saveToFile(bo,filename):
     global dim
     with open(filename, "a") as myfile:
@@ -112,7 +113,9 @@ def saveToFile(bo,filename):
                 myfile.write(str(bo[x][y]))
             myfile.write("\n")
             
-
+#returns a board from a given seed being a integer.
+#Works by converting the integer to binary and letting each 1 or 0 be a cell
+#(adding zeros to beginning to fill up the board)
 def getFromSeed(seed, sideLength):
     global dim
     
@@ -139,7 +142,7 @@ def getFromSeed(seed, sideLength):
     
     return board
 
-         
+#runs a loop to find the seeds that does not die after some generations, returns the list of successful seeds
 def findUsefulSeeds(sideLength):
     succ=[]
     global dim
