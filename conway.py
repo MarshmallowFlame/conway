@@ -4,8 +4,7 @@
 import time
 import math
 #returns number of alive neighbours of given cell
-def neig(r,c,board):
-    global dim
+def neig(r,c,board,dim):
     n=0
     if c>0:
         if r>0:
@@ -26,8 +25,7 @@ def neig(r,c,board):
     return n
 
 #returns string of the current board (with * for alive and . for dead)
-def printBoard(board):
-    global dim
+def printBoard(board,dim):
     theString=""
     for x in range(dim):
         for y in range(dim):
@@ -40,12 +38,11 @@ def printBoard(board):
     return theString
 
 #changes the board to one step ahead in time, while also passing along if the board is the same as previous
-def iterate(board):
-    global dim
+def iterate(board,dim):
     newBoard=[[0 for x in range(dim)] for y in range(dim)]
     for x in range(dim):
         for y in range(dim):
-            ne = neig(y,x,board)
+            ne = neig(y,x,board,dim)
             if ne < 2 or ne >3:
                 newBoard[y][x]=0
             elif ne ==3:
@@ -62,13 +59,13 @@ def iterate(board):
 
 
 #runs the simulation the stated number of times
-def runLife(pr,nr,board):
+def runLife(pr,nr,board,dim):
     korv=0
     while korv <=nr:
         if(pr):
             print(printBoard(board))
             
-        board,err =iterate(board)
+        board,err =iterate(board,dim)
         if not err:
             if pr:
                 print("SAMMA")
@@ -83,8 +80,7 @@ def runLife(pr,nr,board):
     return 1
 
 #returns a board from file named "seed.cw" in seeds     
-def getFromFile():
-    global dim
+def getFromFile(dim):
     with open('seeds/seed.cw', 'r') as file:
         
         dim= len(file.readline())-1
@@ -105,8 +101,7 @@ def getFromFile():
 
 
 #Saves the passed board to a file
-def saveToFile(bo,filename):
-    global dim
+def saveToFile(bo,filename,dim):
     with open(filename, "a") as myfile:
         for x in range(dim):
             for y in range(dim):
@@ -116,13 +111,9 @@ def saveToFile(bo,filename):
 #returns a board from a given seed being a integer.
 #Works by converting the integer to binary and letting each 1 or 0 be a cell
 #(adding zeros to beginning to fill up the board)
-def getFromSeed(seed, sideLength):
-    global dim
+def getFromSeed(seed, dim):
     
     seed="{0:b}".format(seed)
-
-    dim=sideLength
-
     
     if not len(seed)==dim**2:
         for i in range(dim**2 - len(seed)):
@@ -143,10 +134,8 @@ def getFromSeed(seed, sideLength):
     return board
 
 #runs a loop to find the seeds that does not die after some generations, returns the list of successful seeds
-def findUsefulSeeds(sideLength):
+def findUsefulSeeds(dim):
     succ=[]
-    global dim
-    dim = sideLength
     
     start = 0
     end = 2**((dim)**2)
@@ -161,12 +150,12 @@ def findUsefulSeeds(sideLength):
 
         
         board = getFromSeed(i,dim)
-        if runLife(0,5,board):
+        if runLife(0,5,board,dim):
             succ.append(i)
     print(len(succ))
     return succ    
 
-seedToUse = findUsefulSeeds(4)[500]
+seedToUse = findUsefulSeeds(3)[500]
 
 runLife(1,5,getFromSeed(seedToUse,4))
 
