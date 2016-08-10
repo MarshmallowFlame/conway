@@ -10,6 +10,7 @@
 
 import copy
 import time
+import math
 #returns number of alive neighbours of given cell
 def neig(r,c):
     global dim
@@ -103,11 +104,38 @@ def saveToFile(bo,filename):
             myfile.write("\n")
             
 
+def boardFromSeed(seed):
+    global dim
+    
+    seed="{0:b}".format(seed)
+
+    dim=1
+    while dim**2<len(seed):
+        dim+=1
+
+    
+    if not len(seed)==dim**2:
+        for i in range(dim**2 - len(seed)):
+            seed="0"+seed
+
+
+    board = [[0 for x in range(dim)] for y in range(dim)]
+
+    x=0
+    y=0
+    for ch in seed:
+        if x==dim:
+            x=0
+            y+=1
+        board[x][y]=int(ch)
+        x+=1
+    
+    return board
+            
+        
 
 
 
-
-
-board = getFromFile()
+board = boardFromSeed(511)
 runLife(1,100)
 saveToFile(board,"seeds/end.cw")
