@@ -43,9 +43,8 @@ def iterate(board,dim):
     for x in range(dim):
         for y in range(dim):
             ne = neig(y,x,board,dim)
-            if ne < 2 or ne >3:
-                newBoard[y][x]=0
-            elif ne ==3:
+            
+            if ne ==3 or (ne == 2 and board[y][x]):
                 #print(str(x)+" "+str(y))
                 newBoard[y][x]=1
 
@@ -63,7 +62,7 @@ def runLife(pr,nr,board,dim):
     korv=0
     while korv <=nr:
         if(pr):
-            print(printBoard(board))
+            print(printBoard(board,dim))
             
         board,err =iterate(board,dim)
         if not err:
@@ -155,7 +154,7 @@ def findUsefulSeeds(dim):
     print(len(succ))
     return succ    
 
-seedToUse = findUsefulSeeds(3)[500]
+seedToUse = findUsefulSeeds(4)[500]
 
-runLife(1,5,getFromSeed(seedToUse,4))
+runLife(1,5,getFromSeed(seedToUse,5),5)
 
